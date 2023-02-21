@@ -501,7 +501,7 @@ def train_model(
 
     print(run_cmd)
     # Run the command
-    subprocess.run(run_cmd)
+    subprocess.run(run_cmd, shell=True, check=True)
 
     # check if output_dir/last is a folder... therefore it is a diffuser model
     last_dir = pathlib.Path(f'{output_dir}/{output_name}')
@@ -859,13 +859,16 @@ def UI(**kwargs):
             )
 
     # Show the interface
-    launch_kwargs={}
+    # launch_kwargs={"share": True}
+    launch_kwargs = {}
     if not kwargs.get('username', None) == '':
         launch_kwargs["auth"] = (kwargs.get('username', None), kwargs.get('password', None))
     if kwargs.get('server_port', 0) > 0:
         launch_kwargs["server_port"] = kwargs.get('server_port', 0)
     if kwargs.get('inbrowser', False):        
         launch_kwargs["inbrowser"] = kwargs.get('inbrowser', False)
+    if kwargs.get('share', False):
+        launch_kwargs["share"] = kwargs.get('share', False)
     print(launch_kwargs)
     interface.launch(**launch_kwargs)
         
@@ -882,8 +885,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--server_port', type=int, default=0, help='Port to run the server listener on'
     )
+    parser.add_argument("--share", action="store_true", default=False)
     parser.add_argument("--inbrowser", action="store_true", help="Open in browser")
 
     args = parser.parse_args()
 
-    UI(username=args.username, password=args.password, inbrowser=args.inbrowser, server_port=args.server_port)
+    UI(username=args.username, password=args.password, inbrowser=args.inbrowser, server_port=args.server_port, share=args.share)

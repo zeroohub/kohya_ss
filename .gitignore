@@ -7,3 +7,5 @@ cudnn_windows
 build
 wd14_tagger_model
 .DS_Store
+.idea
+.autoenv*
